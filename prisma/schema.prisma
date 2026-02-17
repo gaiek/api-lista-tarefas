@@ -12,3 +12,30 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String
+  tasks      Task[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  status      Status   @default(PENDING)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+enum Status {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}

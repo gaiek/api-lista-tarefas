@@ -1,6 +1,6 @@
 FROM node:22-alpine AS builder
 
-WORKDIR /api-blog
+WORKDIR /api-lista-tarefas 
 
 COPY ./ ./
 
@@ -8,9 +8,9 @@ RUN yarn && yarn build
 
 FROM node:22-alpine
 
-WORKDIR /api-blog
+WORKDIR /api-lista-tarefas 
 
-COPY --from=builder /api-blog/dist ./dist
+COPY --from=builder /api-lista-tarefas /dist ./dist
 COPY ./package.json ./
 COPY ./yarn.lock ./
 

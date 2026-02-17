@@ -1,16 +1,30 @@
 import express from "express";
+import "dotenv/config";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import routes from "./routes/routes.ts";
 import logger from "./logger.ts";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.1.0",
+    info: {
+      title: "API de Lista de Tarefas",
+      version: "1.0.0",
+      description: "API para gerenciar uma lista de tarefas",
+    },
+  },
+  apis: ["./src/routes/*.ts"],
+};
 
 app.use(express.json());
 
-app.get("/", (_, res) => {
-  logger.info("Received a request to the root endpoint");
-  res.send("Hello, World!");
-});
-
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(routes);
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   logger.info(`Server is running on port ${PORT}`);
 });

@@ -21,7 +21,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
     }
 
     try {
-        const secretKey = process.env.JWT_SECRET || "default_secret";
+        const secretKey = process.env.JWT_SECRET;
         if(!secretKey) {
             throw new Error("JWT_SECRET not configured")
         }

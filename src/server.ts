@@ -15,10 +15,46 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "API para gerenciar uma lista de tarefas",
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+      schemas: {
+        CreateUserDTO: {
+          type: "object",
+          properties: {
+            name: { type: "string" },
+            email: { type: "string", format: "email" },
+            password: { type: "string" },
+          },
+          required: ["name", "email", "password"],
+        },
+        User: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            name: { type: "string" },
+            email: { type: "string", format: "email" },
+          },
+          required: ["id", "name", "email"],
+        },
+        LoginUserDTO: {
+          type: "object",
+          properties: {
+            email: { type: "string", format: "email" },
+            password: { type: "string" },
+          },
+          required: ["email", "password"],
+        }
+      },
+    },
   },
   apis: ["./src/routes/routes.ts"],
 };
-
 app.use(express.json());
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);

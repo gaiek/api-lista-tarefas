@@ -6,7 +6,7 @@ import { validate } from "../middleware/validate";
 import { createUserSchema, loginUserSchema } from "../schema/user.schema";
 
 const routes = Router();
-
+console.log("Routes loaded ----->");
 /**
  * @swagger
  * /me:
@@ -66,7 +66,7 @@ routes.get("/me", authenticate, UserController.getMe);
  *             $ref: '#/components/schemas/CreateUserDTO'
  *     responses:
  *       201:
- *         description: Usuário registrado com sucesso.
+ *         description: Usuário criado com sucesso
  *         content:
  *           application/json:
  *             schema:

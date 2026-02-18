@@ -10,7 +10,7 @@ FROM node:22-alpine
 
 WORKDIR /api-lista-tarefas 
 
-COPY --from=builder /api-lista-tarefas /dist ./dist
+COPY --from=builder /api-lista-tarefas/dist ./dist
 COPY ./package.json ./
 COPY ./yarn.lock ./
 

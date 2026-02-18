@@ -6,7 +6,6 @@ import { validate } from "../middleware/validate";
 import { createUserSchema, loginUserSchema } from "../schema/user.schema";
 
 const routes = Router();
-console.log("Routes loaded ----->");
 /**
  * @swagger
  * /me:

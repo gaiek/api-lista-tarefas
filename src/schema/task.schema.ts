@@ -1,4 +1,4 @@
-import { Status } from "src/generated/prisma/enums";
+import { Status } from "../generated/prisma/enums";
 import { z } from "zod";
 
 export const createTaskSchema = z.object({
@@ -21,4 +21,31 @@ export const updateTaskSchema = z.object({
     }),
 });
 
-export type UpdateTaskDTO = z.infer<typeof updateTaskSchema>["body"];
+export type UpdateTaskBodyDTO = z.infer<typeof updateTaskSchema>["body"];
+export type UpdateTaskParamsDTO = z.infer<typeof updateTaskSchema>["params"];
+
+export const listTaskSchema = z.object({
+    query: z.object({
+        status: z.nativeEnum(Status).optional(),
+        pageSize: z.string().regex(/^\d+$/).transform(Number).pipe(z.number().int().positive()).optional(),
+        page: z.string().regex(/^\d+$/).transform(Number).pipe(z.number().int().positive()).optional(),
+    }),
+})
+
+export type ListTaskQueryDTO = z.infer<typeof listTaskSchema>["query"];
+
+export const getListTaskByIdSchema = z.object({
+    params: z.object({
+        id: z.string().uuid(),
+    }),
+})
+
+export type GetTaskByIdParamsDTO = z.infer<typeof getListTaskByIdSchema>["params"];
+
+export const deleteTaskSchema = z.object({
+    params: z.object({
+        id: z.string().uuid(),
+    }),
+})
+
+export type DeleteTaskParamsDTO = z.infer<typeof deleteTaskSchema>["params"];

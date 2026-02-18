@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodError, ZodObject } from "zod";
+import logger from "../logger";
 
 export const validate = (schema: ZodObject<any>) => {
     async function validateMiddleware(req: Request, res: Response, next: NextFunction) {
@@ -20,8 +21,9 @@ export const validate = (schema: ZodObject<any>) => {
                     })),
                 });
             }
+            logger.error({ error }, "Schema validation failed unexpectedly");
+            return res.status(500).json({ message: "Internal server error" });
         }
-        return res.status(500).json({ message: "Internal server error" });
     }
     return validateMiddleware;
 };

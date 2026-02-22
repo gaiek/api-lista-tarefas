@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
+import logger from 'src/logger'
 
 interface JwtPayload {
   id: string
@@ -29,6 +30,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
     req.user = decoded
     next()
   } catch (error) {
+    logger.error({ error }, '[Auth Middleware] Authentication error')
     return res.status(401).json({ message: 'Invalid token' })
   }
 }

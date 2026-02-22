@@ -2,7 +2,7 @@ import { prismaClient } from '../lib/database'
 import logger from '../logger'
 
 export class UserService {
-  static async getUserbyId(userId: string) {
+  async getUserbyId(userId: string) {
     const user = await prismaClient.user.findUnique({
       where: { id: userId },
       select: {
@@ -18,7 +18,7 @@ export class UserService {
     return user
   }
 
-  static async findByEmailWithPassword(emailUser: string) {
+  async findByEmailWithPassword(emailUser: string) {
     const email = await prismaClient.user.findUnique({
       where: { email: emailUser },
       select: {
@@ -36,7 +36,7 @@ export class UserService {
     return email
   }
 
-  static async createUser(data: { name: string; email: string; passwordHash: string }) {
+  async createUser(data: { name: string; email: string; passwordHash: string }) {
     const user = await prismaClient.user.create({
       data: {
         name: data.name,

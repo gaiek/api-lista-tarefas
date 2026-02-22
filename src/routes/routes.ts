@@ -314,5 +314,4 @@ routes.put('/tasks/:id', authenticate, validate(updateTaskSchema), taskControlle
  */
 routes.delete('/tasks/:id', authenticate, validate(deleteTaskSchema), taskController.deleteTask)
 
-
 export default routes

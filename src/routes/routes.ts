@@ -12,6 +12,16 @@ import {
   getListTaskByIdSchema,
   deleteTaskSchema,
 } from '../schema/task.schema'
+import { UserService } from '../service/userService'
+import { TaskService } from '../service/taskService'
+
+const userService = new UserService()
+const userController = new UserController(userService)
+
+const taskService = new TaskService()
+const taskController = new TaskController(taskService)
+
+const authController = new AuthController(userService)
 
 const routes = Router()
 /**
@@ -56,7 +66,7 @@ const routes = Router()
  *                 message:
  *                   type: string
  */
-routes.get('/me', authenticate, UserController.getMe)
+routes.get('/me', authenticate, userController.getMe)
 
 /**
  * @swagger
@@ -102,7 +112,7 @@ routes.get('/me', authenticate, UserController.getMe)
  *                 message:
  *                   type: string
  */
-routes.post('/auth/register', validate(createUserSchema), AuthController.register)
+routes.post('/auth/register', validate(createUserSchema), authController.register)
 
 /**
  * @swagger
@@ -148,7 +158,7 @@ routes.post('/auth/register', validate(createUserSchema), AuthController.registe
  *                 message:
  *                   type: string
  */
-routes.post('/auth/login', validate(loginUserSchema), AuthController.login)
+routes.post('/auth/login', validate(loginUserSchema), authController.login)
 
 /**
  * @swagger
@@ -175,7 +185,7 @@ routes.post('/auth/login', validate(loginUserSchema), AuthController.login)
  *       500:
  *         description: Erro interno do servidor.
  */
-routes.post('/tasks', authenticate, validate(createTaskSchema), TaskController.createTask)
+routes.post('/tasks', authenticate, validate(createTaskSchema), taskController.createTask)
 
 /**
  * @swagger
@@ -207,7 +217,7 @@ routes.post('/tasks', authenticate, validate(createTaskSchema), TaskController.c
  *       500:
  *         description: Erro interno do servidor.
  */
-routes.get('/tasks', authenticate, validate(listTaskSchema), TaskController.getAllTasks)
+routes.get('/tasks', authenticate, validate(listTaskSchema), taskController.getAllTasks)
 
 /**
  * @swagger
@@ -236,7 +246,7 @@ routes.get('/tasks', authenticate, validate(listTaskSchema), TaskController.getA
  *       500:
  *         description: Erro interno do servidor.
  */
-routes.get('/tasks/:id', authenticate, validate(getListTaskByIdSchema), TaskController.getTasksById)
+routes.get('/tasks/:id', authenticate, validate(getListTaskByIdSchema), taskController.getTasksById)
 
 /**
  * @swagger
@@ -273,7 +283,7 @@ routes.get('/tasks/:id', authenticate, validate(getListTaskByIdSchema), TaskCont
  *       500:
  *         description: Erro interno do servidor.
  */
-routes.put('/tasks/:id', authenticate, validate(updateTaskSchema), TaskController.updateTaskStatus)
+routes.put('/tasks/:id', authenticate, validate(updateTaskSchema), taskController.updateTaskStatus)
 
 /**
  * @swagger
@@ -302,7 +312,7 @@ routes.put('/tasks/:id', authenticate, validate(updateTaskSchema), TaskControlle
  *       500:
  *         description: Erro interno do servidor.
  */
-routes.delete('/tasks/:id', authenticate, validate(deleteTaskSchema), TaskController.deleteTask)
+routes.delete('/tasks/:id', authenticate, validate(deleteTaskSchema), taskController.deleteTask)
 
 
 export default routes

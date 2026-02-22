@@ -11,9 +11,9 @@ import {
 import logger from '../logger'
 
 export class TaskController {
-  constructor() {}
+  constructor(private taskService: TaskService) {}
 
-  static async createTask(req: AuthRequest, res: Response) {
+  async createTask(req: AuthRequest, res: Response) {
     try {
       const userId = req.user!.id
       const { title, description }: CreateTaskDTO = req.body
@@ -22,7 +22,7 @@ export class TaskController {
         return res.status(400).json({ message: 'Title is required!' })
       }
 
-      const task = await TaskService.createTask({
+      const task = await this.taskService.createTask({
         title,
         description,
         userId,
@@ -40,11 +40,11 @@ export class TaskController {
     }
   }
 
-  static async getAllTasks(req: AuthRequest, res: Response) {
+  async getAllTasks(req: AuthRequest, res: Response) {
     try {
       const userId = req.user!.id
       const { status, page, pageSize }: ListTaskQueryDTO = req.query
-      const tasks = await TaskService.getAllTasks(userId, { status, page, pageSize })
+      const tasks = await this.taskService.getAllTasks(userId, { status, page, pageSize })
       return res.status(200).json(tasks)
     } catch (error: any) {
       logger.error(`[TaskController.getAllTasks] Error: ${error.message}`)
@@ -52,11 +52,11 @@ export class TaskController {
     }
   }
 
-  static async getTasksById(req: AuthRequest, res: Response) {
+  async getTasksById(req: AuthRequest, res: Response) {
     try {
       const userId = req.user!.id
       const { id: taskId } = req.params as GetTaskByIdParamsDTO
-      const task = await TaskService.getTasksById(taskId)
+      const task = await this.taskService.getTasksById(taskId)
       if (!task) {
         return res.status(404).json({ message: 'Task not found!' })
       }
@@ -70,7 +70,7 @@ export class TaskController {
     }
   }
 
-  static async updateTaskStatus(req: AuthRequest, res: Response) {
+  async updateTaskStatus(req: AuthRequest, res: Response) {
     try {
       const userId = req.user!.id
       const { id: taskId } = req.params as GetTaskByIdParamsDTO
@@ -80,7 +80,7 @@ export class TaskController {
         return res.status(400).json({ message: 'Status is required!' })
       }
 
-      const task = await TaskService.getTasksById(taskId)
+      const task = await this.taskService.getTasksById(taskId)
       if (!task) {
         return res.status(404).json({ message: 'Task not found!' })
       }
@@ -88,7 +88,7 @@ export class TaskController {
         return res.status(403).json({ message: "You don't have permission to update this task!" })
       }
 
-      const updatedTask = await TaskService.updateTaskStatus({
+      const updatedTask = await this.taskService.updateTaskStatus({
         taskId,
         title,
         description,
@@ -108,12 +108,12 @@ export class TaskController {
     }
   }
 
-  static async deleteTask(req: AuthRequest, res: Response) {
+  async deleteTask(req: AuthRequest, res: Response) {
     try {
       const userId = req.user!.id
       const { id: taskId } = req.params as DeleteTaskParamsDTO
 
-      const task = await TaskService.getTasksById(taskId)
+      const task = await this.taskService.getTasksById(taskId)
       if (!task) {
         return res.status(404).json({ message: 'Task not found!' })
       }
@@ -121,7 +121,7 @@ export class TaskController {
         return res.status(403).json({ message: "You don't have permission to delete this task!" })
       }
 
-      await TaskService.deleteTask(taskId)
+      await this.taskService.deleteTask(taskId)
 
       logger.info(`Task deleted: ${task.title}`)
       return res.status(204).send()

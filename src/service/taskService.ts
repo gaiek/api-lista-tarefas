@@ -3,7 +3,7 @@ import logger from '../logger'
 import { Status } from '../generated/prisma/enums'
 
 export class TaskService {
-  static async createTask(data: { title: string; description?: string; userId: string }) {
+  async createTask(data: { title: string; description?: string; userId: string }) {
     const task = await prismaClient.task.create({
       data: {
         title: data.title,
@@ -20,7 +20,7 @@ export class TaskService {
     return task
   }
 
-  static async getAllTasks(
+  async getAllTasks(
     userId: string,
     options: { status?: Status; page?: number; pageSize?: number },
   ) {
@@ -48,7 +48,7 @@ export class TaskService {
     return tasks
   }
 
-  static async getTasksById(taskId: string) {
+  async getTasksById(taskId: string) {
     const task = await prismaClient.task.findUnique({
       where: { id: taskId },
       select: {
@@ -70,7 +70,7 @@ export class TaskService {
     return task
   }
 
-  static async updateTaskStatus(data: {
+  async updateTaskStatus(data: {
     taskId: string
     title?: string
     description?: string
@@ -94,7 +94,7 @@ export class TaskService {
     return task
   }
 
-  static async deleteTask(taskId: string) {
+  async deleteTask(taskId: string) {
     const task = await prismaClient.task.delete({
       where: { id: taskId },
     })

@@ -7,18 +7,18 @@ import { UserService } from '../service/userService'
 import { LoginUserDTO, CreateUserDTO } from '../schema/user.schema'
 
 export class AuthController {
-  constructor() {}
+  constructor(private userService: UserService) {}
 
-  static async register(req: Request, res: Response) {
+  async register(req: Request, res: Response) {
     try {
       const data: CreateUserDTO = req.body
-      const existingUser = await UserService.findByEmailWithPassword(data.email)
+      const existingUser = await this.userService.findByEmailWithPassword(data.email)
       if (existingUser) {
         return res.status(409).json({ message: 'Email already in use' })
       }
 
       const passwordHash = await bcrypt.hash(data.password, 8)
-      const user = await UserService.createUser({
+      const user = await this.userService.createUser({
         name: data.name,
         email: data.email,
         passwordHash,
@@ -39,10 +39,10 @@ export class AuthController {
     }
   }
 
-  static async login(req: Request, res: Response) {
+  async login(req: Request, res: Response) {
     try {
       const data: LoginUserDTO = req.body
-      const user = await UserService.findByEmailWithPassword(data.email)
+      const user = await this.userService.findByEmailWithPassword(data.email)
       if (!user) {
         return res.status(401).json({ message: 'Invalid credentials' })
       }

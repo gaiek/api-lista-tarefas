@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Response } from 'express'
 import { TaskService } from '../service/taskService'
 import { AuthRequest } from '../middleware/auth'
 import {
@@ -34,8 +34,8 @@ export class TaskController {
 
       logger.info(`Task created: ${task.title}`)
       return res.status(201).json(task)
-    } catch (error: any) {
-      logger.error(`[TaskController.createTask] Error: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error({ error }, '[TaskController.createTask] Error')
       return res.status(500).json({ message: 'Internal server error' })
     }
   }
@@ -46,8 +46,8 @@ export class TaskController {
       const { status, page, pageSize }: ListTaskQueryDTO = req.query
       const tasks = await this.taskService.getAllTasks(userId, { status, page, pageSize })
       return res.status(200).json(tasks)
-    } catch (error: any) {
-      logger.error(`[TaskController.getAllTasks] Error: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error({ error }, '[TaskController.getAllTasks] Error')
       return res.status(500).json({ message: 'Internal server error' })
     }
   }
@@ -64,8 +64,8 @@ export class TaskController {
         return res.status(403).json({ message: "You don't have permission to access this task!" })
       }
       return res.status(200).json(task)
-    } catch (error: any) {
-      logger.error(`[TaskController.getTasksById] Error: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error({ error }, '[TaskController.getTasksById] Error')
       return res.status(500).json({ message: 'Internal server error' })
     }
   }
@@ -102,8 +102,8 @@ export class TaskController {
 
       logger.info(`Task updated: ${updatedTask.title}`)
       return res.status(200).json(updatedTask)
-    } catch (error: any) {
-      logger.error(`[TaskController.updateTaskStatus] Error: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error({ error }, '[TaskController.updateTaskStatus] Error')
       return res.status(500).json({ message: 'Internal server error' })
     }
   }
@@ -125,8 +125,8 @@ export class TaskController {
 
       logger.info(`Task deleted: ${task.title}`)
       return res.status(204).send()
-    } catch (error: any) {
-      logger.error(`[TaskController.deleteTask] Error: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error({ error }, '[TaskController.deleteTask] Error')
       return res.status(500).json({ message: 'Internal server error' })
     }
   }

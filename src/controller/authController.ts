@@ -33,7 +33,7 @@ export class AuthController {
       const token = jwt.sign({ id: user?.id }, secretKey, { expiresIn: '1h' })
 
       return res.status(201).json({ user, token })
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error({ error }, '[AuthController.register] Error')
       return res.status(500).json({ message: 'Internal server error' })
     }
@@ -68,7 +68,7 @@ export class AuthController {
         },
         token,
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error({ error }, '[AuthController.login] Error')
       return res.status(500).json({ message: 'Internal server error' })
     }

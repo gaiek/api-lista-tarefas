@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Response } from 'express'
 import { UserService } from '../service/userService'
 import { AuthRequest } from '../middleware/auth'
 import logger from '../logger'
@@ -14,9 +14,9 @@ export class UserController {
         return res.status(404).json({ error: 'User not found' })
       }
       return res.status(200).json(user)
-    } catch (error: any) {
-      logger.error(`[UserController.getMe] Error: ${error.message}`)
-      return res.status(500).json({ message: error.message })
+    } catch (error: unknown) {
+      logger.error({ error }, '[UserController.getMe] Error')
+      return res.status(500).json({ message: 'Internal server error' })
     }
   }
 }

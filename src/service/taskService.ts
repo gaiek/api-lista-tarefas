@@ -41,7 +41,7 @@ export class TaskService {
     })
 
     if (!tasks) {
-      logger.info(`No tasks found`)
+      logger.info('No tasks found')
       return []
     }
 
